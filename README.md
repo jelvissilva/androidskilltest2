@@ -9,7 +9,7 @@ Realizar um Fork no repositório do projeto e ao finalizar o desenvolvimento do 
 Os requisitos mínimos/esperados para a entrega do desafio estão listados abaixo:
 
 	1 - Desenvolver uma aplicação utilizando os seguintes padrões:
-		SQLite
+			SQLite
     		Storage Preferences
     		Conexão HTTP - REST (Retrofit 2)
     		Linguagem Java
