@@ -10,9 +10,9 @@ Os requisitos mínimos/esperados para a entrega do desafio estão listados abaix
 
 	1 - Desenvolver uma aplicação utilizando os seguintes padrões:
 		SQLite
-    Storage Preferences
-    Conexão HTTP - REST (Retrofit 2)
-    Linguagem Java
+    		Storage Preferences
+    		Conexão HTTP - REST (Retrofit 2)
+    		Linguagem Java
 
 		
 	2 - Desenvolver uma tela onde seja possível realizar o Login, contendo os seguintes campos:
@@ -40,7 +40,7 @@ Os requisitos mínimos/esperados para a entrega do desafio estão listados abaix
 		Lista de Albums
 		
 	6 - Desenvolver uma tela para a Lista de Albums, contendo os seguintes campos:
-	  Utilizar um adaptar na lista, exibindo apenas o título e a thumbnail.
+	  	Utilizar um adaptar na lista, exibindo apenas o título e a thumbnail.
 		
 Regras de Negócio
 	
