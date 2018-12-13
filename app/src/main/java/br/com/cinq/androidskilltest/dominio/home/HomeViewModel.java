@@ -8,7 +8,7 @@ import java.util.List;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.EmptyResultSetException;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
-import br.com.cinq.androidskilltest.persistencia.UsuarioRepository;
+import br.com.cinq.androidskilltest.repositorio.UsuarioRepository;
 import br.com.cinq.androidskilltest.util.BundleAndroidViewModel;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
 import io.reactivex.Completable;
@@ -47,20 +47,17 @@ public class HomeViewModel extends BundleAndroidViewModel {
         disposableConsultaListaUsuario = usuarioRepositorio.getTodosUsuarios()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(lista -> {
+                .subscribe(lista -> getListaUsuarios().setValue(lista)
+                        , falha -> {
+                            falha.printStackTrace();
 
-                    getListaUsuarios().setValue(lista);
+                            if (falha instanceof EmptyResultSetException) {
+                                mensagemAviso.postValue("Nenhum usuario encontrado! ");
+                            } else {
+                                mensagemAviso.postValue("Falha desconhecida [" + falha.getMessage() + "]");
+                            }
 
-                }, falha -> {
-                    falha.printStackTrace();
-
-                    if (falha instanceof EmptyResultSetException) {
-                        mensagemAviso.postValue("Nenhum usuario encontrado! ");
-                    } else {
-                        mensagemAviso.postValue("Falha desconhecida [" + falha.getMessage() + "]");
-                    }
-
-                });
+                        });
     }
 
 
@@ -74,20 +71,17 @@ public class HomeViewModel extends BundleAndroidViewModel {
         disposableConsultaUsuario = usuarioRepositorio.getUsuarioPorID(idUsuario)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(usuario -> {
+                .subscribe(usuario -> getUsuarioLogado().setValue(usuario)
+                        , falha -> {
+                            falha.printStackTrace();
 
-                    getUsuarioLogado().setValue(usuario);
+                            if (falha instanceof EmptyResultSetException) {
+                                mensagemAviso.postValue("Usuario logado não encontrado! ");
+                            } else {
+                                mensagemAviso.postValue("Falha desconhecida [" + falha.getMessage() + "]");
+                            }
 
-                }, falha -> {
-                    falha.printStackTrace();
-
-                    if (falha instanceof EmptyResultSetException) {
-                        mensagemAviso.postValue("Usuario logado não encontrado! ");
-                    } else {
-                        mensagemAviso.postValue("Falha desconhecida [" + falha.getMessage() + "]");
-                    }
-
-                });
+                        });
     }
 
     private void resetaDisposable(Disposable disposable) {
@@ -159,25 +153,20 @@ public class HomeViewModel extends BundleAndroidViewModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
-
                             carregarListaUsuarios();
                             mensagemAviso.postValue("Usuario excluido com sucesso!");
                         },
-                        throwable -> {
-                            mensagemAviso.postValue("Falha ao excluir [" + throwable + "]");
-                        }
+                        throwable -> mensagemAviso.postValue("Falha ao excluir [" + throwable + "]")
+
                 );
 
     }
-
 
     public void onCadastradoAlterado() {
 
         carregarUsuarioLogado();
         carregarListaUsuarios();
 
-
     }
-
 
 }

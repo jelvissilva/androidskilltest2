@@ -1,12 +1,9 @@
 package br.com.cinq.androidskilltest.cadastro;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,7 +11,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import br.com.cinq.androidskilltest.R;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
@@ -87,19 +83,12 @@ public class CadastroActivity extends AppCompatActivity {
 
     private void inicializarListeners() {
 
-        btCadastrar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onClickCadastrar();
-            }
-        });
+        btCadastrar.setOnClickListener(v -> onClickCadastrar());
 
         etEmail.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -153,30 +142,11 @@ public class CadastroActivity extends AppCompatActivity {
 
     private void inicializarObservers() {
 
-        viewModel.getMensagemAviso().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String novoAviso) {
-                tvAviso.setText(novoAviso);
-            }
+        viewModel.getMensagemAviso().observe(this, novoAviso -> tvAviso.setText(novoAviso));
 
-        });
+        viewModel.getEstadoMsgConfirmacao().observe(this, exibir -> onEstadoMsgConfirmacaoChanged(exibir));
 
-        viewModel.getEstadoMsgConfirmacao().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean exibir) {
-
-                onEstadoMsgConfirmacaoChanged(exibir);
-
-            }
-
-        });
-
-        viewModel.getUsuarioEditado().observe(this, new Observer<Usuario>() {
-            @Override
-            public void onChanged(Usuario usuario) {
-                carregarValoresEdicao(usuario);
-            }
-        });
+        viewModel.getUsuarioEditado().observe(this, usuario -> carregarValoresEdicao(usuario));
 
     }
 
@@ -208,21 +178,17 @@ public class CadastroActivity extends AppCompatActivity {
         mensagemSucesso += " com sucesso! ";
 
         alertDialog = new AlertDialog.Builder(this)
-                .setTitle("Atenção!")
+                .setTitle(getString(R.string.atencao))
                 .setMessage(mensagemSucesso)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
 
-                        setResult(RESULT_OK);
-                        finish();
+                    setResult(RESULT_OK);
+                    finish();
 
-                    }
                 })
                 .create();
 
         alertDialog.show();
-
 
     }
 
@@ -243,6 +209,7 @@ public class CadastroActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+
         if (isExibindoDialogConfirmacao()) {
             esconderDialogConfirmacao();
         }

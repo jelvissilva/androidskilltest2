@@ -2,7 +2,6 @@ package br.com.cinq.androidskilltest.lista_album;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.cinq.androidskilltest.R;
-import br.com.cinq.androidskilltest.repositorio.PhotosResponse;
+import br.com.cinq.androidskilltest.network.PhotosResponse;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
@@ -39,7 +38,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder>
 
         holder.tvTitulo.setText(photoList.get(position).getTitulo());
         Glide.with(context).load(photoList.get(position).getThumbnailUrl()).into(holder.ivThumbnail);
-        
+
     }
 
     @Override

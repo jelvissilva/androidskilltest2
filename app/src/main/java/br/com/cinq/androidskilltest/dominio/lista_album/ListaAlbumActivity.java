@@ -23,10 +23,19 @@ public class ListaAlbumActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this, new BundleViewModelFactory(this.getApplication(), getIntent().getExtras())).get(ListaAlbumViewModel.class);
 
+        inicializarViews();
+        inicializarObservers();
+
+    }
+
+    private void inicializarViews() {
         rvPhotos = findViewById(R.id.rv_album);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(getApplicationContext());
         rvPhotos.setLayoutManager(lm);
         rvPhotos.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    private void inicializarObservers() {
 
         viewModel.getListaPhotos().observe(this, listaPhoto -> {
 
@@ -34,7 +43,5 @@ public class ListaAlbumActivity extends AppCompatActivity {
             rvPhotos.swapAdapter(adapter, false);
 
         });
-
-
     }
 }

@@ -2,14 +2,12 @@ package br.com.cinq.androidskilltest.home;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +22,6 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +44,10 @@ public class HomeActivity extends AppCompatActivity
     private TextView tvEmailUsuarioLogado;
     public static final int REQUEST_CODE_HOME = 3;
     private AlertDialog alertaMensagemExclusao;
+    private FloatingActionButton fabCadastrar;
+    private DrawerLayout drawer;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,44 +57,71 @@ public class HomeActivity extends AppCompatActivity
         viewModel = ViewModelProviders.of(this, new BundleViewModelFactory(this.getApplication(), getIntent().getExtras())).get(HomeViewModel.class);
 
         inicializarViews();
+        inicializarListeners();
+        inicializarObservers();
+
+
+    }
+
+    private void inicializarViews() {
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        tvNomeUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_nome_usuario_logado);
+        tvEmailUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email_usuario_logado);
+        navigationView.setCheckedItem(R.id.nav_home);
+        rvUsuarios = findViewById(R.id.rv_usuarios);
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(getApplicationContext());
+        rvUsuarios.setLayoutManager(lm);
+        rvUsuarios.setItemAnimator(new DefaultItemAnimator());
+        fabCadastrar = (FloatingActionButton) findViewById(R.id.fab_adicionar);
+
+        setSupportActionBar(toolbar);
+    }
+
+    private void inicializarListeners() {
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        fabCadastrar.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplication(), CadastroActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_HOME);
+        });
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    private void inicializarObservers() {
 
         viewModel.getUsuarioLogado().observe(this, usuario -> {
 
             tvNomeUsuarioLogado.setText(usuario.getNome());
             tvEmailUsuarioLogado.setText(usuario.getEmail());
 
-
         });
 
         viewModel.getListaUsuarios().observe(this, listaUsuarios -> {
 
             adapter = new UsuariosAdapter(this, listaUsuarios, this);
-            rvUsuarios.swapAdapter(adapter,false);
+            rvUsuarios.swapAdapter(adapter, false);
 
         });
 
-        viewModel.getMensagemAviso().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String mensagem) {
+        viewModel.getMensagemAviso().observe(this, mensagem -> {
 
-                if (!TextUtils.isEmpty(mensagem)) {
-
-                    Toast.makeText(getBaseContext(), mensagem, Toast.LENGTH_LONG).show();
-                    viewModel.onAvisoExibido();
-                }
-
-
-            }
-        });
-        viewModel.getUsuarioSolicitadoExclusao().observe(this, new Observer<Usuario>() {
-            @Override
-            public void onChanged(Usuario usuario) {
-
-                onUsuarioSolicitadoExclusaoChanged(usuario);
+            if (!TextUtils.isEmpty(mensagem)) {
+                Toast.makeText(getBaseContext(), mensagem, Toast.LENGTH_LONG).show();
+                viewModel.onAvisoExibido();
             }
 
         });
 
+        viewModel.getUsuarioSolicitadoExclusao().observe(this, usuario -> onUsuarioSolicitadoExclusaoChanged(usuario));
     }
 
     private void onUsuarioSolicitadoExclusaoChanged(Usuario usuario) {
@@ -125,21 +153,17 @@ public class HomeActivity extends AppCompatActivity
         alertaMensagemExclusao = new AlertDialog.Builder(this)
                 .setTitle("Atenção!")
                 .setMessage(mensagem)
-                .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
 
-                        viewModel.onConfirmarExclusaoUsuario(usuario);
-                        dialog.dismiss();
-                    }
+                    viewModel.onConfirmarExclusaoUsuario(usuario);
+                    dialog.dismiss();
+
                 })
-                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancelar), (dialog, which) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        viewModel.onCancelarExclusaoUsuario();
-                        dialog.dismiss();
-                    }
+                    viewModel.onCancelarExclusaoUsuario();
+                    dialog.dismiss();
+
                 })
                 .create();
 
@@ -147,42 +171,6 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void inicializarViews() {
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        tvNomeUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_nome_usuario_logado);
-        tvEmailUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email_usuario_logado);
-
-        navigationView.setCheckedItem(R.id.nav_home);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        rvUsuarios = findViewById(R.id.rv_usuarios);
-
-        RecyclerView.LayoutManager lm = new LinearLayoutManager(getApplicationContext());
-        rvUsuarios.setLayoutManager(lm);
-        rvUsuarios.setItemAnimator(new DefaultItemAnimator());
-
-
-        FloatingActionButton fabCadastrar = (FloatingActionButton) findViewById(R.id.fab_adicionar);
-        fabCadastrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplication(), CadastroActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_HOME);
-            }
-        });
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -255,11 +243,6 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onSelected(Usuario usuario) {
-        Toast.makeText(this, "Selecionado: " + usuario.getNome(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

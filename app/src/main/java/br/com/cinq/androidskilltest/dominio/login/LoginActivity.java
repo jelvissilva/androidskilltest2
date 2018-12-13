@@ -2,15 +2,11 @@ package br.com.cinq.androidskilltest.login;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import br.com.cinq.androidskilltest.R;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
@@ -53,31 +49,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void inicializarListeners() {
 
-        btLogar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onClickLogar();
-            }
+        btLogar.setOnClickListener(v -> {
+            onClickLogar();
         });
 
-        tvCadastrar.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                onClickCadastrar();
-            }
+        tvCadastrar.setOnClickListener(v -> {
+            onClickCadastrar();
         });
     }
 
     private void inicializarObservers() {
 
-        viewModel.getMensagemAviso().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String novoAviso) {
-                tvAviso.setText(novoAviso);
-            }
-
+        viewModel.getMensagemAviso().observe(this, novoAviso -> {
+            tvAviso.setText(novoAviso);
         });
 
     }
@@ -95,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if (isCamposObrigatoriosValidos()) {
 
-            Toast.makeText(this, "on iniciar login", Toast.LENGTH_SHORT).show();
             String emailInformado = etEmail.getText().toString();
             String senhaInformada = etSenha.getText().toString();
             viewModel.onClickLogin(emailInformado, senhaInformada);

@@ -9,7 +9,7 @@ import androidx.room.EmptyResultSetException;
 import br.com.cinq.androidskilltest.cadastro.CadastroActivity;
 import br.com.cinq.androidskilltest.home.HomeActivity;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
-import br.com.cinq.androidskilltest.persistencia.UsuarioRepository;
+import br.com.cinq.androidskilltest.repositorio.UsuarioRepository;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -37,11 +37,9 @@ public class LoginViewModel extends AndroidViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(usuario -> {
 
-
                     if (validarCredenciais(usuario, senhaInformada)) {
                         executarLogin(usuario);
                     }
-
 
                 }, falha -> {
                     falha.printStackTrace();
@@ -53,7 +51,6 @@ public class LoginViewModel extends AndroidViewModel {
                     }
 
                 });
-
     }
 
 
@@ -72,7 +69,6 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     private boolean validarCredenciais(Usuario usuario, String senhaInformada) {
-
 
         if (usuario == null) {
             mensagemAviso.postValue("Email inexistente!");
@@ -105,11 +101,8 @@ public class LoginViewModel extends AndroidViewModel {
     public void iniciarTelaPrincipal() {
 
         Intent intent = new Intent(getApplication(), HomeActivity.class);
-
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         getApplication().startActivity(intent);
-
 
     }
 

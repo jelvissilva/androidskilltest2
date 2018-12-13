@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.EmptyResultSetException;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
-import br.com.cinq.androidskilltest.persistencia.UsuarioRepository;
+import br.com.cinq.androidskilltest.repositorio.UsuarioRepository;
 import br.com.cinq.androidskilltest.util.BundleAndroidViewModel;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
 import io.reactivex.Completable;
@@ -43,6 +43,7 @@ public class CadastroViewModel extends BundleAndroidViewModel {
     private void carregarUsuarioEditado(int idUsuario) {
 
         resetaDisposables();
+
         disposableConsultaUsuario = usuarioRepositorio.getUsuarioPorID(idUsuario)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -60,7 +61,6 @@ public class CadastroViewModel extends BundleAndroidViewModel {
                     }
 
                 });
-
     }
 
 
@@ -104,7 +104,6 @@ public class CadastroViewModel extends BundleAndroidViewModel {
 
     private void cadastrarUsuario() {
 
-
         disposableGravar = Completable.fromAction(() -> usuarioRepositorio.inserirUsuario(usuarioEditado.getValue()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -117,7 +116,6 @@ public class CadastroViewModel extends BundleAndroidViewModel {
                 );
 
     }
-
 
     private void atualizarUsuario() {
 

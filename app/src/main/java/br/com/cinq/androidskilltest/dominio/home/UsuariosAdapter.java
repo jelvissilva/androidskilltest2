@@ -28,27 +28,12 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
             super(view);
             name = view.findViewById(R.id.tvName);
 
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    listener.onSelected(itemsFiltered.get(getAdapterPosition()));
-                }
-            });
+            view.findViewById(R.id.ib_edit).setOnClickListener(v ->
+                    listener.onEditarClicked(itemsFiltered.get(getAdapterPosition())));
 
-            view.findViewById(R.id.ib_edit).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    listener.onEditarClicked(itemsFiltered.get(getAdapterPosition()));
-                }
-            });
-
-            view.findViewById(R.id.ib_delete).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onExcluirClicked(itemsFiltered.get(getAdapterPosition()));
-                }
-            });
+            view.findViewById(R.id.ib_delete).setOnClickListener(v ->
+                    listener.onExcluirClicked(itemsFiltered.get(getAdapterPosition()))
+            );
         }
     }
 
@@ -61,7 +46,7 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.usuario_row_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.usuario_row_item, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -91,6 +76,7 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
                 if (query.isEmpty()) {
                     filtered = items;
                 } else {
+
                     for (Usuario usuario : items) {
 
                         if (usuario.getNome().toLowerCase().contains(query.toLowerCase())) {
@@ -114,7 +100,6 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
     }
 
     public interface UsuariosAdapterListener {
-        void onSelected(Usuario usuario);
 
         void onEditarClicked(Usuario usuario);
 
