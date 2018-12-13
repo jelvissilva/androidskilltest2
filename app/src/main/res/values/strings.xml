@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">AndroidSkillTest</string>
+
+    <string name="title_activity_inicial">Inicio</string>
+    <string name="navigation_drawer_open">Abrir o menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar o menu de navegação</string>
+
+    <string name="informe_email">Email</string>
+    <string name="informe_senha">Senha</string>
+    <string name="logar">logar</string>
+    <string name="confirmar_cadastro">Cadastrar</string>
+    <string name="confirmar_edicao">Alterar</string>
+    <string name="cadastrar">Cadastrar novo usuario</string>
+
+    <string name="falha_desconhecida">Ocorreu uma falha inesperada!</string>
+    <string name="informe_nome">Nome</string>
+    <string name="titulo_cadastro">Cadastro</string>
+    <string name="titulo_edicao">Edição</string>
+    <string name="titulo_lista_album">Lista Album</string>
+    <string name="action_search">Filtrar</string>
+    <string name="titulo_album">Album Photos</string>
+</resources>
