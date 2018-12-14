@@ -4,53 +4,22 @@ import android.app.Application;
 
 import java.util.List;
 
-import br.com.cinq.androidskilltest.persistencia.SkillTestRoomDatabase;
-import br.com.cinq.androidskilltest.persistencia.Usuario;
-import br.com.cinq.androidskilltest.persistencia.UsuarioDao;
-import io.reactivex.Single;
+import br.com.cinq.androidskilltest.network.NetworkClient;
+import br.com.cinq.androidskilltest.network.NetworkInterface;
+import br.com.cinq.androidskilltest.network.PhotosResponse;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
-public class UsuarioRepository {
+public class PhotoRepository {
 
-    private UsuarioDao usuarioDao;
-
-    public UsuarioRepository(Application application) {
-
-        usuarioDao = SkillTestRoomDatabase.getDatabase(application).usuarioDao();
-
+    public PhotoRepository(Application application) {
     }
 
-    public Single<Integer> countEmailUtilizado(String email, int idIgnorar) {
-        return usuarioDao.countEmailUtilizado(email, idIgnorar);
+    public Observable<List<PhotosResponse>> getPhotos() {
+        return NetworkClient.getRetrofit().create(NetworkInterface.class)
+                .getPhotos()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
-
-    public Single<Usuario> getUsuario(String email) {
-
-        return usuarioDao.buscarPorEmail(email);
-
-    }
-
-    public Single<Usuario> getUsuarioPorID(int id) {
-
-        return usuarioDao.buscarPorID(id);
-
-    }
-
-    public Single<List<Usuario>> getTodosUsuarios() {
-
-        return usuarioDao.buscarTodos();
-
-    }
-
-    public void inserirUsuario(Usuario usuario) {
-        usuarioDao.inserir(usuario);
-    }
-
-    public void excluirUsuario(Usuario usuario) {
-        usuarioDao.delete(usuario.getId());
-    }
-
-    public void atualizarUsuario(Usuario usuario) {
-        usuarioDao.atualizar(usuario);
-    }
-
 }

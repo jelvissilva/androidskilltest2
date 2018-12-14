@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.lista_album;
+package br.com.cinq.androidskilltest.dominio.lista_album;
 
 import android.os.Bundle;
 
@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.cinq.androidskilltest.R;
 import br.com.cinq.androidskilltest.util.BundleViewModelFactory;
+import br.com.cinq.androidskilltest.util.EmptyRecyclerView;
 
 public class ListaAlbumActivity extends AppCompatActivity {
 
     private ListaAlbumViewModel viewModel;
-    private RecyclerView rvPhotos;
+    private EmptyRecyclerView rvPhotos;
     private PhotoAdapter adapter;
 
     @Override
@@ -33,6 +34,8 @@ public class ListaAlbumActivity extends AppCompatActivity {
         RecyclerView.LayoutManager lm = new LinearLayoutManager(getApplicationContext());
         rvPhotos.setLayoutManager(lm);
         rvPhotos.setItemAnimator(new DefaultItemAnimator());
+        rvPhotos.setEmptyView(findViewById(R.id.empty_view));
+
     }
 
     private void inicializarObservers() {
@@ -40,7 +43,8 @@ public class ListaAlbumActivity extends AppCompatActivity {
         viewModel.getListaPhotos().observe(this, listaPhoto -> {
 
             adapter = new PhotoAdapter(listaPhoto, getBaseContext());
-            rvPhotos.swapAdapter(adapter, false);
+            rvPhotos.setAdapter(adapter);
+            rvPhotos.setEmptyView(findViewById(R.id.empty_view));
 
         });
     }

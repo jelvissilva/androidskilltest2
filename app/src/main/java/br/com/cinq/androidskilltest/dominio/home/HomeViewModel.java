@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.home;
+package br.com.cinq.androidskilltest.dominio.home;
 
 import android.app.Application;
 import android.os.Bundle;

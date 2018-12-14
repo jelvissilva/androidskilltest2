@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.lista_album;
+package br.com.cinq.androidskilltest.dominio.lista_album;
 
 
 import android.content.Context;
@@ -15,8 +15,9 @@ import java.util.List;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.cinq.androidskilltest.R;
 import br.com.cinq.androidskilltest.network.PhotosResponse;
+import br.com.cinq.androidskilltest.util.EmptyRecyclerView;
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
+public class PhotoAdapter extends EmptyRecyclerView.Adapter<PhotoAdapter.PhotoHolder> {
 
     List<PhotosResponse> photoList;
     Context context;

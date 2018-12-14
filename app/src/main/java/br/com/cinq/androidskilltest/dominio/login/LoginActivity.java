@@ -1,19 +1,23 @@
-package br.com.cinq.androidskilltest.login;
+package br.com.cinq.androidskilltest.dominio.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import br.com.cinq.androidskilltest.R;
+import br.com.cinq.androidskilltest.dominio.cadastro.CadastroActivity;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
 
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_LOGIN = 5;
     private EditText etEmail;
     private EditText etSenha;
     private Button btLogar;
@@ -40,11 +44,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private void inicializarViews() {
 
-        etEmail = (EditText) findViewById(R.id.et_email);
-        etSenha = (EditText) findViewById(R.id.et_senha);
-        btLogar = (Button) findViewById(R.id.bt_logar);
-        tvAviso = (TextView) findViewById(R.id.tv_aviso);
-        tvCadastrar = (TextView) findViewById(R.id.tv_cadastrar);
+        etEmail = findViewById(R.id.et_email);
+        etSenha = findViewById(R.id.et_senha);
+        btLogar = findViewById(R.id.bt_logar);
+        tvAviso = findViewById(R.id.tv_aviso);
+        tvCadastrar = findViewById(R.id.tv_cadastrar);
     }
 
     private void inicializarListeners() {
@@ -68,8 +72,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onClickCadastrar() {
 
-        viewModel.iniciarTelaCadastro();
-
+        Intent intent = new Intent(getApplication(), CadastroActivity.class);
+        startActivityForResult(intent, REQUEST_CODE_LOGIN);
     }
 
     private void onClickLogar() {
@@ -87,6 +91,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        viewModel.zerarAviso();
+
+    }
+
 
     private boolean isCamposObrigatoriosValidos() {
 

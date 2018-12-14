@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.lista_album;
+package br.com.cinq.androidskilltest.dominio.lista_album;
 
 import android.app.Application;
 import android.os.Bundle;

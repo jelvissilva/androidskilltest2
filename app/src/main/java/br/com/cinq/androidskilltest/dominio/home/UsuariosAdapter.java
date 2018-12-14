@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.home;
+package br.com.cinq.androidskilltest.dominio.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -46,7 +46,7 @@ public class UsuariosAdapter extends RecyclerView.Adapter<UsuariosAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.usuario_row_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.row_item_usuario, parent, false);
         return new ViewHolder(itemView);
     }
 

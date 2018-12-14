@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.home;
+package br.com.cinq.androidskilltest.dominio.home;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import br.com.cinq.androidskilltest.R;
-import br.com.cinq.androidskilltest.cadastro.CadastroActivity;
-import br.com.cinq.androidskilltest.lista_album.ListaAlbumActivity;
+import br.com.cinq.androidskilltest.dominio.cadastro.CadastroActivity;
+import br.com.cinq.androidskilltest.dominio.lista_album.ListaAlbumActivity;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
 import br.com.cinq.androidskilltest.util.BundleViewModelFactory;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
@@ -48,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private NavigationView navigationView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,19 +66,23 @@ public class HomeActivity extends AppCompatActivity
 
     private void inicializarViews() {
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        tvNomeUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_nome_usuario_logado);
-        tvEmailUsuarioLogado = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_email_usuario_logado);
-        navigationView.setCheckedItem(R.id.nav_home);
+        toolbar = findViewById(R.id.toolbar);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        tvNomeUsuarioLogado = navigationView.getHeaderView(0).findViewById(R.id.tv_nome_usuario_logado);
+        tvEmailUsuarioLogado = navigationView.getHeaderView(0).findViewById(R.id.tv_email_usuario_logado);
         rvUsuarios = findViewById(R.id.rv_usuarios);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(getApplicationContext());
         rvUsuarios.setLayoutManager(lm);
         rvUsuarios.setItemAnimator(new DefaultItemAnimator());
-        fabCadastrar = (FloatingActionButton) findViewById(R.id.fab_adicionar);
+        fabCadastrar = findViewById(R.id.fab_adicionar);
 
         setSupportActionBar(toolbar);
+        destacarSelecaoMenuHome();
+    }
+
+    private void destacarSelecaoMenuHome() {
+        navigationView.setCheckedItem(R.id.nav_home);
     }
 
     private void inicializarListeners() {
@@ -110,6 +115,11 @@ public class HomeActivity extends AppCompatActivity
             adapter = new UsuariosAdapter(this, listaUsuarios, this);
             rvUsuarios.swapAdapter(adapter, false);
 
+            if (isSearchViewInicializada()) {
+                adapter.getFilter().filter(searchView.getQuery());
+            }
+
+
         });
 
         viewModel.getMensagemAviso().observe(this, mensagem -> {
@@ -122,6 +132,10 @@ public class HomeActivity extends AppCompatActivity
         });
 
         viewModel.getUsuarioSolicitadoExclusao().observe(this, usuario -> onUsuarioSolicitadoExclusaoChanged(usuario));
+    }
+
+    private boolean isSearchViewInicializada() {
+        return searchView != null;
     }
 
     private void onUsuarioSolicitadoExclusaoChanged(Usuario usuario) {
@@ -151,7 +165,7 @@ public class HomeActivity extends AppCompatActivity
         String mensagem = "Tem certeza que deseja excluir o usuario " + usuario.getNome() + "? ";
 
         alertaMensagemExclusao = new AlertDialog.Builder(this)
-                .setTitle("Atenção!")
+                .setTitle(getString(R.string.atencao))
                 .setMessage(mensagem)
                 .setPositiveButton(getString(R.string.sim), (dialog, which) -> {
 
@@ -196,7 +210,7 @@ public class HomeActivity extends AppCompatActivity
     private void inicializarSearchView(Menu menu) {
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
@@ -232,7 +246,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_lista_album) {
 
             Intent intent = new Intent(getApplication(), ListaAlbumActivity.class);
-            getApplication().startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_HOME);
 
         } else if (id == R.id.nav_deslogar) {
 
@@ -258,6 +272,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        destacarSelecaoMenuHome();
 
         if (resultCode == RESULT_OK) {
             viewModel.onCadastradoAlterado();

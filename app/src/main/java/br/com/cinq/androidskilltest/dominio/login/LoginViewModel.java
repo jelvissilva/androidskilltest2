@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.login;
+package br.com.cinq.androidskilltest.dominio.login;
 
 import android.app.Application;
 import android.content.Intent;
@@ -6,8 +6,7 @@ import android.content.Intent;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.EmptyResultSetException;
-import br.com.cinq.androidskilltest.cadastro.CadastroActivity;
-import br.com.cinq.androidskilltest.home.HomeActivity;
+import br.com.cinq.androidskilltest.dominio.home.HomeActivity;
 import br.com.cinq.androidskilltest.persistencia.Usuario;
 import br.com.cinq.androidskilltest.repositorio.UsuarioRepository;
 import br.com.cinq.androidskilltest.util.SessaoSharedPreferences;
@@ -106,10 +105,7 @@ public class LoginViewModel extends AndroidViewModel {
 
     }
 
-    public void iniciarTelaCadastro() {
-
-        Intent intent = new Intent(getApplication(), CadastroActivity.class);
-        getApplication().startActivity(intent);
-
+    public void zerarAviso() {
+        mensagemAviso.postValue("");
     }
 }

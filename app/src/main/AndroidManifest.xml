@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".dominio.login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,15 +21,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".cadastro.CadastroActivity"
+            android:name=".dominio.cadastro.CadastroActivity"
             android:label="@string/titulo_cadastro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".dominio.home.HomeActivity"
             android:label="@string/title_activity_inicial"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".lista_album.ListaAlbumActivity"
+            android:name=".dominio.lista_album.ListaAlbumActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/titulo_lista_album"></activity>
     </application>

@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.cadastro;
+package br.com.cinq.androidskilltest.dominio.cadastro;
 
 import android.os.Bundle;
 import android.text.Editable;

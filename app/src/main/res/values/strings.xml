@@ -19,4 +19,8 @@
     <string name="titulo_lista_album">Lista Album</string>
     <string name="action_search">Filtrar</string>
     <string name="titulo_album">Album Photos</string>
+    <string name="sim">SIM</string>
+    <string name="cancelar">CANCELAR</string>
+    <string name="ok">OK</string>
+    <string name="atencao">Atenção!</string>
 </resources>

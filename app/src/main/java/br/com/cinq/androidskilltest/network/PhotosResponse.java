@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.repositorio;
+package br.com.cinq.androidskilltest.network;
 
 
 import com.google.gson.annotations.Expose;

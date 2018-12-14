@@ -1,9 +1,12 @@
-package br.com.cinq.androidskilltest.persistencia;
+package br.com.cinq.androidskilltest.repositorio;
 
 import android.app.Application;
 
 import java.util.List;
 
+import br.com.cinq.androidskilltest.persistencia.SkillTestRoomDatabase;
+import br.com.cinq.androidskilltest.persistencia.Usuario;
+import br.com.cinq.androidskilltest.persistencia.UsuarioDao;
 import io.reactivex.Single;
 
 public class UsuarioRepository {

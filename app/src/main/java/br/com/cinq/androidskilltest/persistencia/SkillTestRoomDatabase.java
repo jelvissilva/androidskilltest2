@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 @Database(entities = {Usuario.class}, version = 2)
 public abstract class SkillTestRoomDatabase extends RoomDatabase {
 
+    private final static String DATABASE_NAME = "skilltest_database";
 
     public abstract UsuarioDao usuarioDao();
 
@@ -20,7 +21,7 @@ public abstract class SkillTestRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE =
                             Room.databaseBuilder(context.getApplicationContext(),
-                                    SkillTestRoomDatabase.class, "skilltest_database")
+                                    SkillTestRoomDatabase.class, DATABASE_NAME)
                                     .fallbackToDestructiveMigration()
                                     .build();
 

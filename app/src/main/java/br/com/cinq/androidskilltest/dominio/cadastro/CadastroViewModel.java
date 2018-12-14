@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.cadastro;
+package br.com.cinq.androidskilltest.dominio.cadastro;
 
 import android.app.Application;
 import android.os.Bundle;

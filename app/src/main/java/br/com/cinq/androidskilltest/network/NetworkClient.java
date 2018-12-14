@@ -1,4 +1,4 @@
-package br.com.cinq.androidskilltest.repositorio;
+package br.com.cinq.androidskilltest.network;
 
 
 import okhttp3.OkHttpClient;
